@@ -1,0 +1,41 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dail-sql for spider",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--data_type", "spider",
+                "--split", "test",
+                "--tokenizer", "gpt-3.5-turbo",
+                "--max_seq_len", "4096",
+                "--prompt_repr", "SQL",
+                "--k_shot", "9",
+                "--example_type", "QA",
+                "--selector_type", "EUCDISQUESTIONMASK"
+            ]
+        }, {
+            "name": "dail-sql for bird",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--data_type", "bird",
+                "--split", "test",
+                "--tokenizer", "gpt-3.5-turbo",
+                "--max_seq_len", "4096",
+                "--prompt_repr", "SQL",
+                "--k_shot", "7",
+                "--example_type", "QA",
+                "--selector_type", "EUCDISQUESTIONMASK"
+            ]
+        }
+    ]
+}

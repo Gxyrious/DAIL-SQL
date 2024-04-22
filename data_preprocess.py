@@ -56,7 +56,7 @@ def schema_linking_producer(test, train, table, db, dataset_dir, compute_cv_link
 
 
 def bird_pre_process(bird_dir, with_evidence=False):
-    new_db_path = os.path.join(bird_dir, "database")
+    new_db_path = os.path.join(bird_dir, "databases")
     if not os.path.exists(new_db_path):
         os.system(f"cp -r {os.path.join(bird_dir, 'train/train_databases/*')} {new_db_path}")
         os.system(f"cp -r {os.path.join(bird_dir, 'dev/dev_databases/*')} {new_db_path}")

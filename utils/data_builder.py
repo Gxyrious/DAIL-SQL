@@ -1,5 +1,6 @@
 import json
 import os
+from tqdm import tqdm
 
 from utils.utils import get_tables, sql2skeleton
 from utils.linking_utils.application import get_question_pattern_with_schema_linking
@@ -8,7 +9,7 @@ from utils.linking_utils.application import get_question_pattern_with_schema_lin
 class BasicDataset(object):
     def __init__(self, path_data, pre_test_result=None):
         self.path_data = os.path.join(path_data, self.name)
-        self.path_db = os.path.join(self.path_data, "database")
+        self.path_db = os.path.join(self.path_data, "database" if self.name == "spider" else "databases")
         self.test_json = os.path.join(self.path_data, self.test_json)
         self.test_gold = os.path.join(self.path_data, self.test_gold)
         self.train_json = os.path.join(self.path_data, self.train_json)
@@ -82,7 +83,7 @@ class BasicDataset(object):
     def get_pre_skeleton(self, queries=None, schemas=None, mini_set=False):
         if queries:
             skeletons = []
-            for query,schema in zip(queries, schemas):
+            for query,schema in tqdm(zip(queries, schemas), ncols=100, total=len(queries), desc="get pre skeletion"):
                 skeletons.append(sql2skeleton(query, schema))
             if mini_set and self.mini_test_index_json:
                 mini_index = self.get_mini_index()
@@ -121,7 +122,8 @@ class BasicDataset(object):
                 pre_queries = self.get_pre_skeleton(queries, schemas, mini_set)
         else:
             pre_queries = None
-        return self.data_pre_process(tests, linking_infos, pre_queries)
+        test_json = self.data_pre_process(tests, linking_infos, pre_queries)
+        return test_json
 
     def get_test_schema_linking(self, mini_set=False):
         if not os.path.exists(self.path_test_schema_linking):
@@ -180,7 +182,7 @@ class BasicDataset(object):
         db_id_to_table_json = dict()
         for table_json in self.get_table_json():
             db_id_to_table_json[table_json["db_id"]] = table_json
-        for data in datas:
+        for data in tqdm(datas, ncols=100, desc="data pre process"):
             db_id = data["db_id"]
             data["tables"] = self.get_tables(db_id)
             if data["query"].strip()[:6] != 'SELECT':
