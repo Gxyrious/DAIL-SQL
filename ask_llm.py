@@ -3,6 +3,7 @@ import os
 import json
 
 import openai
+openai.api_base = "https://jyapi.top/v1"
 from tqdm import tqdm
 
 from llm.chatgpt import init_chatgpt, ask_llm
@@ -69,6 +70,7 @@ if __name__ == '__main__':
             if i >= args.end_index:
                 break
             try:
+                # import pdb; pdb.set_trace()
                 res = ask_llm(args.model, batch, args.temperature, args.n)
             except openai.error.InvalidRequestError:
                 print(f"The {i}-th question has too much tokens! Return \"SELECT\" instead")

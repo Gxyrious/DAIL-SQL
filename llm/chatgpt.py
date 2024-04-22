@@ -12,6 +12,7 @@ def init_chatgpt(OPENAI_API_KEY, OPENAI_GROUP_ID, model):
     # else:
     #     openai.api_key = OPENAI_API_KEY
     #     openai.organization = OPENAI_GROUP_ID
+    # import pdb; pdb.set_trace()
     openai.api_key = OPENAI_API_KEY
     openai.organization = OPENAI_GROUP_ID
 
@@ -35,6 +36,7 @@ def ask_completion(model, batch, temperature):
 
 
 def ask_chat(model, messages: list, temperature, n):
+    # import pdb; pdb.set_trace()
     response = openai.ChatCompletion.create(
         model=model,
         messages=messages,

@@ -36,6 +36,7 @@ class BasicDataset(object):
             self.databases = dict()
             # for db_id in os.listdir(self.path_db):
             #     self.databases[db_id] = self.get_tables(db_id)
+            # import pdb; pdb.set_trace()
             with open(self.table_json) as f:
                 tables = json.load(f)
                 for tj in tables:
@@ -207,6 +208,8 @@ class BasicDataset(object):
         if pre_queries:
             for id in range(min(len(datas), len(pre_queries))):
                 datas[id]["pre_skeleton"] = pre_queries[id]
+                if datas[id]["query_skeleton"] != datas[id]["pre_skeleton"]:
+                    pass
         return datas
 
 

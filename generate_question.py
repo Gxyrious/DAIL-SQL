@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     # Read all tables into a dict
     databases = data.get_databases()
-
+    # import pdb; pdb.set_trace()
     # select the prompt
     prompt_generator = prompt_factory(args.prompt_repr, args.k_shot, args.example_type, args.selector_type)
     prompt = prompt_generator(data=data, tokenizer=args.tokenizer)
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     cross_domain = args.split == "train"
     
     for question_json in tqdm(getattr(data, func_name)()):
-        
+        # import pdb; pdb.set_trace()
         question_format = prompt.format(target=question_json,
                                         max_seq_len=args.max_seq_len,
                                         max_ans_len=args.max_ans_len,

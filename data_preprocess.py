@@ -26,6 +26,7 @@ def schema_linking_producer(test, train, table, db, dataset_dir, compute_cv_link
     for db_id, schema in tqdm(schemas.items(), desc="DB connections"):
         sqlite_path = Path(dataset_dir) / db / db_id / f"{db_id}.sqlite"
         source: sqlite3.Connection
+        # import pdb; pdb.set_trace()
         with sqlite3.connect(str(sqlite_path)) as source:
             dest = sqlite3.connect(':memory:')
             dest.row_factory = sqlite3.Row
