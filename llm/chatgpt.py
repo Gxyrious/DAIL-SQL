@@ -3,6 +3,8 @@ import json.decoder
 import openai
 from utils.enums import LLM
 import time
+import tiktoken
+encoding = tiktoken.encoding_for_model("gpt-4")
 
 
 def init_chatgpt(OPENAI_API_KEY, OPENAI_GROUP_ID, model):
@@ -55,6 +57,7 @@ def ask_chat(model, messages: list, temperature, n):
 
 def ask_llm(model: str, batch: list, temperature: float, n:int):
     n_repeat = 0
+    # import pdb; pdb.set_trace()
     while True:
         try:
             if model in LLM.TASK_COMPLETIONS:
@@ -64,6 +67,13 @@ def ask_llm(model: str, batch: list, temperature: float, n:int):
             elif model in LLM.TASK_CHAT:
                 # batch size must be 1
                 assert len(batch) == 1, "batch must be 1 in this mode"
+                token_count = len(encoding.encode(batch[0]))
+                # import pdb; pdb.set_trace()
+                # print(f'token_count = {token_count}')
+                if model == LLM.GPT_4 and token_count > 8000 - 500:
+                    model = LLM.GPT_4_32K
+                    print('use gpt-4-32k')
+                # model = LLM.GPT_4_32K
                 messages = [{"role": "user", "content": batch[0]}]
                 response = ask_chat(model, messages, temperature, n)
                 response['response'] = [response['response']]

@@ -1,14 +1,15 @@
-python data_preprocess.py --data_type bird --data_dir ./dataset/bird
+# python data_preprocess.py --data_type fiben --data_dir ./dataset/fiben
 
-# python generate_question.py --data_type bird \
+# python generate_question.py --data_type fiben \
 # --split test --tokenizer gpt-3.5-turbo --prompt_repr SQL \
-# --selector_type EUCDISQUESTIONMASK --max_seq_len 4096 --k_shot 7 --example_type QA
+# --selector_type EUCDISQUESTIONMASK --max_seq_len 4096 --k_shot 4 --example_type QA
 
-# python ask_llm.py \
-# --openai_api_key $1 \
-# --model gpt-4 \
-# --question ./dataset/process/BIRD-TEST_SQL_7-SHOT_EUCDISQUESTIONMASK_QA-EXAMPLE_CTX-200_ANS-4096/ \
-# --db_dir ./dataset/bird/databases
+python ask_llm.py \
+--openai_api_key $1 \
+--model gpt-4 \
+--question ./dataset/process/FIBEN-TEST_SQL_4-SHOT_EUCDISQUESTIONMASK_QA-EXAMPLE_CTX-200_ANS-4096/ \
+--db_dir ./dataset/fiben/databases \
+--n 5
 
 # python generate_question.py --data_type bird --split test --tokenizer gpt-3.5-turbo \
 # --prompt_repr SQL --max_seq_len 4096 --k_shot 7 --example_type QA --selector_type EUCDISMASKPRESKLSIMTHR \

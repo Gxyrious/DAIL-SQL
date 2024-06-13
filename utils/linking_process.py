@@ -78,6 +78,7 @@ def preprocess_schema_uncached(schema,
             r.foreign_keys_tables[str(column.table.id)].add(column.foreign_key_for.table.id)
 
     r.table_bounds.append(len(schema.columns))
+    # import pdb; pdb.set_trace()
     assert len(r.table_bounds) == len(schema.tables) + 1
 
     for i, table in enumerate(schema.tables):
@@ -147,7 +148,7 @@ class SpiderEncoderV2Preproc(abstract_preproc.AbstractPreproc):
         self.texts = collections.defaultdict(list)
 
     def preprocess_item(self, item, schema, validation_info):
-        question, question_for_copying = self._tokenize_for_copying(item['question_toks'], item['question'])
+        question, question_for_copying = self._tokenize_for_copying(item['question_toks'], item['question']) # 这句没有其他依赖
         preproc_schema = self._preprocess_schema(schema)
         if self.compute_sc_link:
             assert preproc_schema.column_names[0][0].startswith("<type:")

@@ -85,7 +85,11 @@ class BasicDataset(object):
         if queries:
             skeletons = []
             for query,schema in tqdm(zip(queries, schemas), ncols=100, total=len(queries), desc="get pre skeletion"):
-                skeletons.append(sql2skeleton(query, schema))
+                try:
+                    skeleton = sql2skeleton(query, schema)
+                except Exception:
+                    import pdb; pdb.set_trace()
+                skeletons.append(skeleton)
             if mini_set and self.mini_test_index_json:
                 mini_index = self.get_mini_index()
                 skeletons = [skeletons[i] for i in mini_index]
@@ -241,6 +245,24 @@ class BirdDataset(BasicDataset):
     train_gold = "train_gold.sql"
     table_json = "tables.json"
     mini_test_index_json = None
+    
+class WindDataset(BasicDataset):
+    name = "wind"
+    test_json = "dev.json"
+    test_gold = "dev.sql"
+    train_json = "train.json"
+    train_gold = "train_gold.sql"
+    table_json = "tables.json"
+    mini_test_index_json = None
+
+class FibenDataset(BasicDataset):
+    name = "fiben"
+    test_json = "dev.json"
+    test_gold = "dev.sql"
+    train_json = "train.json"
+    train_gold = "train_gold.sql"
+    table_json = "tables.json"
+    mini_test_index_json = None
 
 
 def load_data(data_type, path_data, pre_test_result=None):
@@ -250,5 +272,9 @@ def load_data(data_type, path_data, pre_test_result=None):
         return RealisticDataset(path_data, pre_test_result)
     elif data_type.lower() == "bird":
         return BirdDataset(path_data, pre_test_result)
+    elif data_type.lower() == "wind":
+        return WindDataset(path_data, pre_test_result)
+    elif data_type.lower() == "fiben":
+        return FibenDataset(path_data, pre_test_result)
     else:
         raise RuntimeError()

@@ -36,6 +36,16 @@
                 "--example_type", "QA",
                 "--selector_type", "EUCDISQUESTIONMASK"
             ]
+        }, {
+            "name": "data_preprocess",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--data_type", "bird",
+                "--data_dir", "./dataset/bird",
+            ]
         }
     ]
 }

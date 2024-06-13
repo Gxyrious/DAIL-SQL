@@ -6,3 +6,4 @@ dataset/
 third_party/
 vector_cache/
 tmp/
+nltk_data/

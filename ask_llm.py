@@ -3,7 +3,10 @@ import os
 import json
 
 import openai
-openai.api_base = "https://jyapi.top/v1"
+
+openai.api_base = "https://cn2us02.opapi.win//v1"
+# openai.api_base = "https://jyapi.top/v1"
+# openai.api_base = "https://api1.zhtec.xyz/v1"
 from tqdm import tqdm
 
 from llm.chatgpt import init_chatgpt, ask_llm
@@ -25,6 +28,7 @@ if __name__ == '__main__':
                                                       LLM.GPT_35_TURBO_0613,
                                                       # LLM.TONG_YI_QIAN_WEN,
                                                       LLM.GPT_35_TURBO_16K,
+                                                      LLM.GPT_4_32K,
                                                       LLM.GPT_4],
                         default=LLM.GPT_35_TURBO)
     parser.add_argument("--start_index", type=int, default=0)
@@ -52,6 +56,7 @@ if __name__ == '__main__':
         mode = "w"
     else:
         mode = "a"
+    mode = "a"
 
     if args.mini_index_path:
         mini_index = json.load(open(args.mini_index_path, 'r'))
@@ -63,7 +68,8 @@ if __name__ == '__main__':
     question_loader = DataLoader(questions, batch_size=args.batch_size, shuffle=False, drop_last=False)
 
     token_cnt = 0
-    with open(out_file, mode) as f:
+    # with open(out_file, mode) as f:
+    if True:
         for i, batch in enumerate(tqdm(question_loader)):
             if i < args.start_index:
                 continue
@@ -75,7 +81,8 @@ if __name__ == '__main__':
             except openai.error.InvalidRequestError:
                 print(f"The {i}-th question has too much tokens! Return \"SELECT\" instead")
                 res = ""
-
+            # if not res:
+            #     continue
             # parse result
             token_cnt += res["total_tokens"]
             if args.n == 1:
@@ -84,12 +91,13 @@ if __name__ == '__main__':
                     sql = " ".join(sql.replace("\n", " ").split())
                     sql = process_duplication(sql)
                     # python version should >= 3.8
-                    if sql.startswith("SELECT"):
-                        f.write(sql + "\n")
-                    elif sql.startswith(" "):
-                        f.write("SELECT" + sql + "\n")
-                    else:
-                        f.write("SELECT " + sql + "\n")
+                    with open(out_file, mode) as f:
+                        if sql.startswith("SELECT"):
+                            f.write(sql + "\n")
+                        elif sql.startswith(" "):
+                            f.write("SELECT" + sql + "\n")
+                        else:
+                            f.write("SELECT " + sql + "\n")
             else:
                 results = []
                 cur_db_ids = db_ids[i * args.batch_size: i * args.batch_size + len(batch)]
@@ -109,8 +117,9 @@ if __name__ == '__main__':
                         'db_id': db_id,
                         'p_sqls': processed_sqls
                     }
+                    # import pdb; pdb.set_trace()
                     final_sqls = get_sqls([result], args.n, args.db_dir)
-
-                    for sql in final_sqls:
-                        f.write(sql + "\n")
+                    with open(out_file, mode) as f:
+                        for sql in final_sqls:
+                            f.write(sql + "\n")
 

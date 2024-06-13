@@ -23,7 +23,7 @@ def schema_linking_producer(test, train, table, db, dataset_dir, compute_cv_link
     schemas, _ = load_tables([os.path.join(dataset_dir, table)])
 
     # Backup in-memory copies of all the DBs and create the live connections
-    for db_id, schema in tqdm(schemas.items(), desc="DB connections"):
+    for db_id, schema in tqdm(schemas.items(), desc="DB connections", ncols=100):
         sqlite_path = Path(dataset_dir) / db / db_id / f"{db_id}.sqlite"
         source: sqlite3.Connection
         # import pdb; pdb.set_trace()
@@ -94,20 +94,20 @@ def bird_pre_process(bird_dir, with_evidence=False):
         json.dump(json_preprocess(data_jsons), wf, indent=4)
     os.system(f"cp {os.path.join(bird_dir, 'dev/dev.sql')} {bird_dir}")
     os.system(f"cp {os.path.join(bird_dir, 'train/train_gold.sql')} {bird_dir}")
-    tables = []
-    with open(os.path.join(bird_dir, 'dev/dev_tables.json')) as f:
-        tables.extend(json.load(f))
-    with open(os.path.join(bird_dir, 'train/train_tables.json')) as f:
-        tables.extend(json.load(f))
-    with open(os.path.join(bird_dir, 'tables.json'), 'w') as f:
-        json.dump(tables, f, indent=4)
+    # tables = []
+    # with open(os.path.join(bird_dir, 'dev/dev_tables.json')) as f:
+    #     tables.extend(json.load(f))
+    # with open(os.path.join(bird_dir, 'train/train_tables.json')) as f:
+    #     tables.extend(json.load(f))
+    # with open(os.path.join(bird_dir, 'tables.json'), 'w') as f:
+    #     json.dump(tables, f, indent=4)
 
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_dir", type=str, default="./dataset/spider")
-    parser.add_argument("--data_type", type=str, choices=["spider", "bird"], default="spider")
+    parser.add_argument("--data_dir", type=str, default="./dataset/fiben")
+    parser.add_argument("--data_type", type=str, choices=["spider", "bird", "wind", "fiben"], default="fiben")
     args = parser.parse_args()
 
     data_type = args.data_type
@@ -140,3 +140,23 @@ if __name__ == '__main__':
         bird_db = 'databases'
         ## do not compute the cv_link since it is time-consuming in the huge database in BIRD
         schema_linking_producer(bird_dev, bird_train, bird_table, bird_db, bird_dir, compute_cv_link=False)
+    elif data_type == "wind":
+        # schema-linking for wind without evidence
+        wind_dir = './dataset/wind'
+        bird_pre_process(wind_dir, with_evidence=False)
+        wind_dev = 'dev.json'
+        wind_train = 'train.json'
+        wind_table = 'tables.json'
+        wind_db = 'databases'
+        ## do not compute the cv_link since it is time-consuming in the huge database in BIRD
+        schema_linking_producer(wind_dev, wind_train, wind_table, wind_db, wind_dir, compute_cv_link=False)
+    elif data_type == "fiben":
+        # schema-linking for wind without evidence
+        wind_dir = './dataset/fiben'
+        bird_pre_process(wind_dir, with_evidence=False)
+        wind_dev = 'dev.json'
+        wind_train = 'train.json'
+        wind_table = 'tables.json'
+        wind_db = 'databases'
+        ## do not compute the cv_link since it is time-consuming in the huge database in BIRD
+        schema_linking_producer(wind_dev, wind_train, wind_table, wind_db, wind_dir, compute_cv_link=False)

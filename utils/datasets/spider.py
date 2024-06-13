@@ -132,7 +132,7 @@ def load_tables(paths):
             for column in columns:
                 if column.table:
                     column.table.columns.append(column)
-
+            # import pdb; pdb.set_trace()
             for column_id in schema_dict['primary_keys']:
                 # Register primary keys
                 if isinstance(column_id, list):
@@ -140,9 +140,11 @@ def load_tables(paths):
                         column = columns[each_id]
                         column.table.primary_keys.append(column)
                 else:
+                    if column_id >= len(columns):
+                        import pdb; pdb.set_trace()
                     column = columns[column_id]
                     column.table.primary_keys.append(column)
-
+            # import pdb; pdb.set_trace()
             foreign_key_graph = nx.DiGraph()
             for source_column_id, dest_column_id in schema_dict['foreign_keys']:
                 # Register foreign keys

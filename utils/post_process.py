@@ -23,7 +23,8 @@ EXEC_TMP_DIR = os.path.join(os.path.dirname(__file__), "tmp")
 
 
 def permute_tuple(element: Tuple, perm: Tuple) -> Tuple:
-    assert len(element) == len(perm)
+    # if len(element) != len(perm):
+    #     import pdb; pdb.set_trace()
     return tuple([element[i] for i in perm])
 
 
@@ -107,6 +108,7 @@ def result_eq(result1: List[Tuple], result2: List[Tuple], order_matters: bool) -
     # if one of the permutation make result_1, result_2 equivalent, then they are equivalent
     for perm in get_constraint_permutation(tab1_sets_by_columns, result2):
         if len(perm) != len(set(perm)):
+            # print('perm', perm)
             continue
         if num_cols == 1:
             result2_perm = result2
@@ -149,6 +151,7 @@ async def exec_on_db_(sqlite_path: str, query: str) -> Tuple[str, Any]:
     cursor = get_cursor_from_path(sqlite_path)
     try:
         cursor.execute(query)
+        import pdb; pdb.set_trace()
         result = cursor.fetchall()
         cursor.close()
         cursor.connection.close()

@@ -1,14 +1,15 @@
-python data_preprocess.py --data_type bird --data_dir ./dataset/bird
+# python data_preprocess.py --data_type wind --data_dir ./dataset/wind
 
-# python generate_question.py --data_type bird \
+# python generate_question.py --data_type wind \
 # --split test --tokenizer gpt-3.5-turbo --prompt_repr SQL \
 # --selector_type EUCDISQUESTIONMASK --max_seq_len 4096 --k_shot 7 --example_type QA
 
 # python ask_llm.py \
 # --openai_api_key $1 \
 # --model gpt-4 \
-# --question ./dataset/process/BIRD-TEST_SQL_7-SHOT_EUCDISQUESTIONMASK_QA-EXAMPLE_CTX-200_ANS-4096/ \
-# --db_dir ./dataset/bird/databases
+# --question ./dataset/process/WIND-TEST_SQL_7-SHOT_EUCDISQUESTIONMASK_QA-EXAMPLE_CTX-200_ANS-4096/ \
+# --db_dir ./dataset/wind/databases \
+# --start_index 92
 
 # python generate_question.py --data_type bird --split test --tokenizer gpt-3.5-turbo \
 # --prompt_repr SQL --max_seq_len 4096 --k_shot 7 --example_type QA --selector_type EUCDISMASKPRESKLSIMTHR \
